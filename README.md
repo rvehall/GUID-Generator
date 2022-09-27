@@ -1,7 +1,5 @@
 # guid-generator README
 
-This is the README for your extension "guid-generator". After writing up a brief description, we recommend including the following sections.
-
 ## Features
 
 This generates a GUID and puts it into the active file.
