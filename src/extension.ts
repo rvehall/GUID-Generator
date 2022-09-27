@@ -20,8 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// Display a message box to the user
 		try {
 			let uuid = uuidv4();
-			// clipboard.write(uuid);
-			vscode.window.showInformationMessage(uuid);
+			vscode.window.showInformationMessage(`${uuid} has been inserted.`);
 
 			vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(uuid));
 		} catch (error) {
