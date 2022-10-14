@@ -28,6 +28,8 @@ npm install
 vsce package
 ```
 
+To install, go to the Extensions panel and click the elipses (`...`) at the top. From here, `Install from VSIX`, navigate to the root of `guid-generator`, and select the generated .vsix file.
+
 ### 1.0.0
 
 Initial release of GUID Generator
