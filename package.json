@@ -10,14 +10,19 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:guid.generate"
+    "onCommand:guid.generateOneInFile",
+    "onCommand:guid.replaceAllInFile"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "guid.generate",
+        "command": "guid.generateOneInFile",
         "title": "GUID Generator"
+      },
+      {
+        "command": "guid.replaceAllInFile",
+        "title": "Find and Replace GUIDS (in a single file)"
       }
     ]
   },

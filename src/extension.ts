@@ -1,36 +1,52 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { v4 as uuidv4 } from 'uuid';
-import clipboard from 'clipboardy';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "guid-generator" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('guid.generate', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
+	// This generates a UUID inline
+	let generateOneInFile = vscode.commands.registerCommand('guid.generateOneInFile', () => {
 		try {
 			let uuid = uuidv4();
 			vscode.window.showInformationMessage(`${uuid} has been inserted.`);
 
 			vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(uuid));
+
+
 		} catch (error) {
 			vscode.window.showInformationMessage(String(error));
 
 		}
 	});
+	context.subscriptions.push(generateOneInFile);
 
-	context.subscriptions.push(disposable);
+	// This finds *all* v4 UUIDs in a *single* (open) file and replaces them.
+	let replaceAllInFile = vscode.commands.registerCommand('guid.replaceAllInFile', () => {
+		try {
+			const editor = vscode.window.activeTextEditor;
+			const document = editor?.document;
+			
+			editor?.edit(editBuilder => {
+				const lines = vscode.window.activeTextEditor?.document.lineCount || 0;
+				let regex = /[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}(?:\/.*)?$/i;
+
+				for (let line = 0; line < lines; line++) {
+					let lineToEdit = editor.document.lineAt(line);
+					let range = document?.getWordRangeAtPosition(lineToEdit.range.start, regex) || new vscode.Range(lineToEdit.range.start, lineToEdit.range.end);
+					let text = vscode.window.activeTextEditor?.document.lineAt(line);
+					let newText = typeof text === "undefined" ?  "" : text?.text;
+		
+					newText = newText.replace(regex, uuidv4());
+					editBuilder.replace(range, newText);
+				}
+			});
+		} catch (error) {
+			vscode.window.showInformationMessage(String(error));
+		}
+	});
+	context.subscriptions.push(replaceAllInFile);
+
+
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
+
