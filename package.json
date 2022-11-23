@@ -22,7 +22,7 @@
       },
       {
         "command": "guid.replaceAllInFile",
-        "title": "Find and Replace GUIDS (in a single file)"
+        "title": "Find and Replace GUIDs (in a single file)"
       }
     ]
   },
